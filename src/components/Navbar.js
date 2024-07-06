@@ -2,24 +2,21 @@ import Link from 'next/link';
 
 const Navbar = () => {
   return (
-    <nav className="bg-blue-500 p-4 fixed top-0 left-0 right-0 z-10">
-      <div className="container mx-auto flex justify-between items-center">
-        <Link href="/" className="text-white text-2xl font-bold">
-          City Events
-        </Link>
-        <ul className="flex space-x-4">
-          <li>
-            <Link href="/" className="text-white hover:text-blue-200">
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link href="/add-event" className="text-white hover:text-blue-200">
-              Add Event
-            </Link>
-          </li>
-          {/* Add more navigation items as needed */}
-        </ul>
+    <nav className="bg-blue-600 shadow-lg">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="flex justify-between">
+          <div className="flex space-x-7">
+            <div>
+              <Link href="/" className="flex items-center py-4 px-2">
+                <span className="font-semibold text-white text-lg">City Events</span>
+              </Link>
+            </div>
+          </div>
+          <div className="hidden md:flex items-center space-x-3">
+            <Link href="/" className="py-4 px-2 text-white hover:text-gray-200 transition duration-300">Home</Link>
+            <Link href="/add-event" className="py-2 px-2 font-medium text-white bg-blue-500 rounded hover:bg-blue-400 transition duration-300">Add Event</Link>
+          </div>
+        </div>
       </div>
     </nav>
   );

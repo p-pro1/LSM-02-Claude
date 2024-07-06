@@ -5,6 +5,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '@/firebase';
 import imageCompression from 'browser-image-compression';
+import { createUniqueSlug } from '@/utils/slugify';
 
 export default function EventForm() {
   const [name, setName] = useState('');
@@ -45,12 +46,15 @@ export default function EventForm() {
         imageUrl = await getDownloadURL(snapshot.ref);
       }
 
+      const slug = await createUniqueSlug(db, name, date);
+
       await addDoc(collection(db, 'events'), {
         name,
         date,
         location,
         description,
         imageUrl,
+        slug,
       });
 
       // Clear the form
@@ -67,65 +71,67 @@ export default function EventForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 mb-8">
-      <h2 className="text-2xl font-semibold text-black">Add New Event</h2>
-      <div>
-        <label htmlFor="name" className="block text-black">Event Name:</label>
+    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Add New Event</h2>
+      <div className="mb-4">
+        <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">Event Name:</label>
         <input
           type="text"
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="w-full border rounded p-2 text-black"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>
-      <div>
-        <label htmlFor="date" className="block text-black">Date:</label>
+      <div className="mb-4">
+        <label htmlFor="date" className="block text-gray-700 text-sm font-bold mb-2">Date:</label>
         <input
           type="date"
           id="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
           required
-          className="w-full border rounded p-2 text-black"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>
-      <div>
-        <label htmlFor="location" className="block text-black">Location:</label>
+      <div className="mb-4">
+        <label htmlFor="location" className="block text-gray-700 text-sm font-bold mb-2">Location:</label>
         <input
           type="text"
           id="location"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
           required
-          className="w-full border rounded p-2 text-black"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>
-      <div>
-        <label htmlFor="description" className="block text-black">Description:</label>
+      <div className="mb-4">
+        <label htmlFor="description" className="block text-gray-700 text-sm font-bold mb-2">Description:</label>
         <textarea
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           required
-          className="w-full border rounded p-2 text-black"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           rows="4"
         ></textarea>
       </div>
-      <div>
-        <label htmlFor="image" className="block text-black">Event Image:</label>
+      <div className="mb-4">
+        <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-2">Event Image:</label>
         <input
           type="file"
           id="image"
           onChange={handleImageChange}
           accept="image/*"
-          className="w-full border rounded p-2 text-black"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         />
       </div>
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-        Add Event
-      </button>
+      <div className="flex items-center justify-between">
+        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          Add Event
+        </button>
+      </div>
     </form>
   );
 }
